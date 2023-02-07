@@ -1,0 +1,103 @@
+---
+title: 'Parametrize your e2e tests with playwright and your models'
+date: '2023-02-07'
+tags: ['e2e', 'playwright', 'automation']
+draft: false
+summary: 'Write parametrized tests using TypeScript and the models you already have.'
+---
+
+### Parameterizing your tests with you JSON models!
+
+If you've been writing playwright tests of any level of complexity, you may have run across the concept of parameterization either in the docs or elsewhere.
+
+Basically, parameterization is the idea that your test code is in itself like a function, which runs according to some external input. Most examples that you'll find in the Playwright docs and elsewhere rely on CSV files to do this. Each row in the CSV represents a test case, so you pull in your CSV and loop through each test case.
+
+Something like this
+
+```cases.csv
+Description, DueDate, Assignee, Title
+some task description, 12-1-2023, John Wayne, My first task!
+some task description 2, 12-2-2023, Bruce Willis, My second task!
+```
+
+```javascript
+const testCases = require("./cases.csv)
+// lets just assume we have a couple of Page-Object-Model style classes with some methods that do the grunt work here, TaskFormPage and TaskListPage
+
+test("It can create all different kinds of tasks", async ({ page }) => {
+    for (const case of testCases) {
+        const form = new TaskFormPage(page);
+        const taskList = new TaskListPage(page);
+
+        await form.fill(case)
+        await form.submit()
+        await taskList.validate(case)
+    }
+})
+```
+
+Our test now pulls in the CSV and loops through each case, inside of a single test. This is really great for very simple cases, but CSV is limited, and we aren't getting very much TypeScript help here, and we do love TypeScript right?
+
+What would happen if our model was a little more complex, and we couldn't represent it easily in CSV? For example, what if we had a list of comments that needed to go into our test case for this Task? Well, we could try to throw a list inside of our CSV, but now we have the work of curating these test cases and keeping the formatting correct, not to mention any more nested structures that might be needed in addition to each comment
+
+Well, in my experience, there comes a time to leave aside CSV, and pick up JSON for parameterization.
+First, lets just take that original case and add on the comments. Notice that as soon as we start needing more information in our list, the CSV would have gotten unecessarily complicated, but JSON was built for this.
+
+```json
+[
+  {
+    "title": "My first task!",
+    "description": "",
+    "dueDate": "12-1-2023",
+    "assignee": "John Wayne",
+    "comments": [
+      {
+        "text": "This doesn't look good",
+        "importance": 1
+      }
+    ]
+  },
+  {
+    "title": "My first task!",
+    "description": "",
+    "dueDate": "12-1-2023",
+    "assignee": "John Wayne",
+    "comments": [
+      {
+        "text": "Ok!",
+        "importance": 3
+      },
+      {
+        "text": "Ok!",
+        "importance": 3
+      }
+    ]
+  }
+]
+```
+
+You might be thinking at this point - that looks like my data model? And if you are using a document DB, this may literally be a copy of your model, and that's ok. In fact, I'd propose that you go ahead and just use your model!
+
+Why?
+
+You probably already have a TypeScript class representing your model, and if that code is automatically generated, you'll even get the benefit of knowing that your e2e tests are going to fail prior to running them when your model changes. On top of that, if you build in the ability for your tests to handle all the cases you give it in your parameters, you now only need to use your UI to generate new test cases!
+
+All you would need to do is click through the UI one time for your tasks feature for each case you want to generate, grab the output from your database or API, and paste it into a `cases.json` file. Boom - done with tests - add new cases at your leisure.
+
+So in summary, we end up with this.
+
+```javascript
+const testCases = require("./cases.json)
+// lets just assume we have a couple of Page-Object-Model style classes with some methods that do the grunt work here, TaskFormPage and TaskListPage
+
+test("It can create all different kinds of tasks", async ({ page }) => {
+    for (const case of testCases) {
+        const form = new TaskFormPage(page);
+        const taskList = new TaskListPage(page);
+
+        await form.fill(case) // in this case, form.fill can handle all the top level fields, as well as loop through the nested "comments" element and fill in all that is necessary
+        await form.submit()
+        await taskList.validate(case)
+    }
+})
+```
