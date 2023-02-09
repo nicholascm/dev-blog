@@ -20,16 +20,10 @@ At the time of feature implementation, if engineers are spending the time necess
 
 This level of consistent, thorough testing will give your team important powers.
 
-Among the most important of these powers is the power to refactor and reuse with confidence. In any startup you inevitably write some code that needs to be removed and replaced with something more readable, efficient, etc. With proper end to end testing, you know that your most important assets (your customers) are not going to be affected by the changes you made to make it 20x faster.
+Among the most important of these powers is the power to refactor and reuse with confidence. In any startup you inevitably write some code that needs to be removed and replaced with something more readable, efficient, etc. With proper end to end testing, you know that your most important assets (your customers) are not going to be affected by the changes you made to make that widge/service 20x faster.
 
-Without end to end testing, every change at the level of refactoring bears that cognitive burden of worry that the change will affect the app in a negative way, breaking a core use case, causing downtime, and this cognitive load is amplified by time and lack of familiarity with the code. As you bring in new engineers, they will not want to touch "that stuff that was written > 1 year ago by someone else who isn't at the company anymore", but with proper coverage, you can refactor, or even try out multiple implementations with feature flags, all with confidence that the feature is not broken.
+> This cognitive load is amplified by the passage of time and lack of familiarity with the code.
 
-> ...this cognitive load is amplified by time and lack of familiarity with the code.
+Without end to end testing, every change at the level of refactoring bears that cognitive burden of worry that the change will affect the app in a negative way, breaking a core use case, causing downtime. This cognitive load is amplified by the passage of time and lack of familiarity with the code. As you bring in new engineers, they will not want to touch "that old stuff that was written > 1 year ago by someone else who isn't at the company anymore", but with proper coverage, you can refactor, or even try out multiple implementations with feature flags, all with confidence that the feature is not broken.
 
 At the end of the day, the reason your team should be end to end testing is just that the investment pays off across your entire team by providing confidence, the confidence to move fast **without** breaking things, and the confidence to make continual improvements.
-
-- protection from new contributors
-- regression testing "built in" - something people are / should be doing if quality is cared about
-- covers multiple bases (api testing, unit testing)
-- allows you to refactor, and you need to refactor
-- first off, what is e2e testing
