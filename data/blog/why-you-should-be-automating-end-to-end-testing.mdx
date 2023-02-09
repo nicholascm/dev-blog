@@ -1,0 +1,29 @@
+---
+title: 'Why you should be writing e2e tests for your apps, even as an early startup'
+date: '2023-02-09'
+tags: ['e2e', 'startups', 'automation', 'end to end', 'refactoring']
+draft: false
+summary: 'There are plenty of reasons to write e2e tests, even early in the game of your company.'
+---
+
+Imagine for a minute your team has worked hard on a brand new web app (App A) for 6 months, and then business priorities shift, you're going to be working on a different app for some new business need which has arisen, probably won't touch the other one for another 6 months.
+
+3 months in of course, you get that message - "hey we, need X feature in App A to be changed." In your mind, you remember that the code there touches many parts of the app. What will give you the confidence to ship this feature, quickly? '
+
+The answer is obvious, you'll need to test out **all** of the places that this change touches, and only then, can you really feel confident that this new feature hasn't broken other features unintentionally, especially when the time since the app has been modified starts to increase, or unfamiliar engineers are working in the code base.
+
+Regression testing is both expensive and frustrating. Its expensive because to truly do it usually means walking through a lot of your business cases with relatively complex parts of your app. Its frustrating because you need to do it often, and it takes a lot of time to do well. When your app has a decent amount of business logic, many engineers will just fall back on testing "happy paths" and assume that the feature is still working in its entirety, if they even do that.
+
+Automated end to end testing, done well, can provide a cost-effective solution.
+
+At the time of feature implementation, if engineers are spending the time necessary to automate the most important use cases, verifying that these cases are still working as desired can become part of every PR build - a full regression test, every push.
+
+This level of consistent, thorough testing will give your team important powers.
+
+Among the most important of these powers is the power to refactor and reuse with confidence. In any startup you inevitably write some code that needs to be removed and replaced with something more readable, efficient, etc. With proper end to end testing, you know that your most important assets (your customers) are not going to be affected by the changes you made to make that widge/service 20x faster.
+
+> This cognitive load is amplified by the passage of time and lack of familiarity with the code.
+
+Without end to end testing, every change at the level of refactoring bears that cognitive burden of worry that the change will affect the app in a negative way, breaking a core use case, causing downtime. This cognitive load is amplified by the passage of time and lack of familiarity with the code. As you bring in new engineers, they will not want to touch "that old stuff that was written > 1 year ago by someone else who isn't at the company anymore", but with proper coverage, you can refactor, or even try out multiple implementations with feature flags, all with confidence that the feature is not broken.
+
+At the end of the day, the reason your team should be end to end testing is just that the investment pays off across your entire team by providing confidence, the confidence to move fast **without** breaking things, and the confidence to make continual improvements.
